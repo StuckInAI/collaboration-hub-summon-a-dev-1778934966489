@@ -1,24 +1,10 @@
 import type { Project, Skill, AboutData } from '@/types';
 
-const KEYS = {
+const STORAGE_KEYS = {
   projects: 'portfolio_projects',
   skills: 'portfolio_skills',
   about: 'portfolio_about',
   adminSession: 'portfolio_admin_session',
-} as const;
-
-// ── Default data ────────────────────────────────────────────────────────────
-
-const DEFAULT_ABOUT: AboutData = {
-  name: 'Alex Johnson',
-  tagline: 'Full-Stack Developer & Creative Technologist',
-  bio: 'I build fast, accessible, and beautiful web applications. Passionate about clean code, great UX, and solving real problems with technology.',
-  email: 'alex@example.com',
-  github: 'https://github.com',
-  linkedin: 'https://linkedin.com',
-  twitter: 'https://twitter.com',
-  resumeUrl: '#',
-  profileImageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
 };
 
 const DEFAULT_PROJECTS: Project[] = [
@@ -27,47 +13,59 @@ const DEFAULT_PROJECTS: Project[] = [
     title: 'E-Commerce Platform',
     description: 'A full-stack e-commerce solution with real-time inventory, Stripe payments, and an admin dashboard.',
     techStack: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
-    imageUrl: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=338&fit=crop',
+    imageUrl: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=80',
     liveUrl: 'https://example.com',
     githubUrl: 'https://github.com',
     featured: true,
   },
   {
     id: '2',
-    title: 'AI Chat Application',
-    description: 'Real-time chat app powered by OpenAI GPT with conversation history and user authentication.',
-    techStack: ['Next.js', 'OpenAI', 'Socket.io', 'MongoDB'],
-    imageUrl: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=600&h=338&fit=crop',
+    title: 'AI Task Manager',
+    description: 'A smart task management app with AI-powered prioritization and natural language input.',
+    techStack: ['Next.js', 'TypeScript', 'OpenAI', 'Prisma'],
+    imageUrl: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&q=80',
     liveUrl: 'https://example.com',
     githubUrl: 'https://github.com',
     featured: true,
   },
   {
     id: '3',
-    title: 'DevOps Dashboard',
-    description: 'Monitoring dashboard for CI/CD pipelines with real-time metrics and alerting.',
-    techStack: ['React', 'Python', 'Docker', 'Grafana'],
-    imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=338&fit=crop',
+    title: 'Dev Blog Engine',
+    description: 'A markdown-based blogging engine with syntax highlighting, RSS feeds, and SEO optimisation.',
+    techStack: ['Astro', 'MDX', 'Tailwind'],
+    imageUrl: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&q=80',
     githubUrl: 'https://github.com',
     featured: false,
   },
 ];
 
 const DEFAULT_SKILLS: Skill[] = [
-  { name: 'React', level: 95, category: 'Frontend' },
-  { name: 'TypeScript', level: 90, category: 'Frontend' },
-  { name: 'Node.js', level: 88, category: 'Backend' },
-  { name: 'PostgreSQL', level: 82, category: 'Backend' },
-  { name: 'Docker', level: 78, category: 'DevOps' },
-  { name: 'AWS', level: 74, category: 'DevOps' },
+  { id: '1', name: 'React', level: 95, category: 'Frontend' },
+  { id: '2', name: 'TypeScript', level: 90, category: 'Frontend' },
+  { id: '3', name: 'Node.js', level: 88, category: 'Backend' },
+  { id: '4', name: 'PostgreSQL', level: 82, category: 'Backend' },
+  { id: '5', name: 'Docker', level: 78, category: 'DevOps' },
+  { id: '6', name: 'AWS', level: 74, category: 'DevOps' },
 ];
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
+const DEFAULT_ABOUT: AboutData = {
+  name: 'Alex Morgan',
+  tagline: 'Full-Stack Developer & Open Source Enthusiast',
+  bio: 'I craft performant, accessible web applications with a focus on clean code and delightful user experiences. Passionate about developer tooling, open source, and pushing the web forward.',
+  email: 'alex@example.com',
+  github: 'https://github.com',
+  linkedin: 'https://linkedin.com',
+  twitter: 'https://twitter.com',
+  resumeUrl: '#',
+  profileImageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
+  location: 'San Francisco, CA',
+};
 
 function load<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T) : fallback;
+    if (!raw) return fallback;
+    return JSON.parse(raw) as T;
   } catch {
     return fallback;
   }
@@ -77,64 +75,52 @@ function save<T>(key: string, value: T): void {
   try {
     localStorage.setItem(key, JSON.stringify(value));
   } catch {
-    // ignore storage errors
+    // ignore
   }
 }
 
-// ── Projects ────────────────────────────────────────────────────────────────
-
 export function getProjects(): Project[] {
-  return load(KEYS.projects, DEFAULT_PROJECTS);
+  return load(STORAGE_KEYS.projects, DEFAULT_PROJECTS);
 }
 
 export function saveProjects(projects: Project[]): void {
-  save(KEYS.projects, projects);
+  save(STORAGE_KEYS.projects, projects);
 }
 
-// ── Skills ──────────────────────────────────────────────────────────────────
-
 export function getSkills(): Skill[] {
-  return load(KEYS.skills, DEFAULT_SKILLS);
+  return load(STORAGE_KEYS.skills, DEFAULT_SKILLS);
 }
 
 export function saveSkills(skills: Skill[]): void {
-  save(KEYS.skills, skills);
+  save(STORAGE_KEYS.skills, skills);
 }
 
-// ── About ───────────────────────────────────────────────────────────────────
-
 export function getAbout(): AboutData {
-  return load(KEYS.about, DEFAULT_ABOUT);
+  return load(STORAGE_KEYS.about, DEFAULT_ABOUT);
 }
 
 export function saveAbout(about: AboutData): void {
-  save(KEYS.about, about);
+  save(STORAGE_KEYS.about, about);
 }
-
-// ── Admin session ────────────────────────────────────────────────────────────
 
 const ADMIN_PASSWORD = 'admin123';
 
-export function checkAdminAuth(password: string): boolean {
+export function checkAdminPassword(password: string): boolean {
   return password === ADMIN_PASSWORD;
 }
 
 export function setAdminSession(): void {
-  save(KEYS.adminSession, { loggedIn: true, ts: Date.now() });
+  save(STORAGE_KEYS.adminSession, true);
 }
 
 export function clearAdminSession(): void {
   try {
-    localStorage.removeItem(KEYS.adminSession);
+    localStorage.removeItem(STORAGE_KEYS.adminSession);
   } catch {
     // ignore
   }
 }
 
 export function isAdminLoggedIn(): boolean {
-  const session = load<{ loggedIn?: boolean; ts?: number } | null>(KEYS.adminSession, null);
-  if (!session?.loggedIn) return false;
-  // Session expires after 24 hours
-  const age = Date.now() - (session.ts ?? 0);
-  return age < 24 * 60 * 60 * 1000;
+  return load(STORAGE_KEYS.adminSession, false);
 }
