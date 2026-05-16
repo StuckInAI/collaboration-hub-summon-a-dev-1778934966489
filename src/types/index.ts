@@ -4,20 +4,18 @@ export interface Project {
   description: string;
   techStack: string[];
   imageUrl: string;
-  liveUrl: string;
-  githubUrl: string;
+  liveUrl?: string;
+  githubUrl?: string;
   featured: boolean;
-  order: number;
 }
 
 export interface Skill {
-  id: string;
   name: string;
-  category: 'Frontend' | 'Backend' | 'Database' | 'DevOps' | 'Other';
-  proficiency: number;
+  level: number;
+  category: string;
 }
 
-export interface About {
+export interface AboutData {
   name: string;
   tagline: string;
   bio: string;

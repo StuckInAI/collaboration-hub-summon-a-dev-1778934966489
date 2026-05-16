@@ -1,133 +1,140 @@
-import type { Project, Skill, About } from '@/types';
+import type { Project, Skill, AboutData } from '@/types';
 
 const KEYS = {
   projects: 'portfolio_projects',
   skills: 'portfolio_skills',
   about: 'portfolio_about',
   adminSession: 'portfolio_admin_session',
-};
+} as const;
 
-// ── Admin Auth ────────────────────────────────────────────────────────────────
+// ── Default data ────────────────────────────────────────────────────────────
 
-const ADMIN_PASSWORD = 'admin123';
-
-export function checkAdminPassword(password: string): boolean {
-  return password === ADMIN_PASSWORD;
-}
-
-export function setAdminSession(): void {
-  localStorage.setItem(KEYS.adminSession, 'true');
-}
-
-export function clearAdminSession(): void {
-  localStorage.removeItem(KEYS.adminSession);
-}
-
-export function isAdminLoggedIn(): boolean {
-  return localStorage.getItem(KEYS.adminSession) === 'true';
-}
-
-// ── Projects ──────────────────────────────────────────────────────────────────
-
-const DEFAULT_PROJECTS: Project[] = [
-  {
-    id: '1',
-    title: 'E-Commerce Platform',
-    description: 'A full-stack e-commerce platform with real-time inventory management, payment processing, and an admin dashboard.',
-    techStack: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
-    imageUrl: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80',
-    liveUrl: 'https://example.com',
-    githubUrl: 'https://github.com',
-    featured: true,
-    order: 0,
-  },
-  {
-    id: '2',
-    title: 'AI Task Manager',
-    description: 'A smart task management app that uses AI to prioritise your to-dos and suggest optimal work schedules.',
-    techStack: ['Next.js', 'OpenAI', 'Prisma', 'Tailwind CSS'],
-    imageUrl: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&q=80',
-    liveUrl: 'https://example.com',
-    githubUrl: 'https://github.com',
-    featured: true,
-    order: 1,
-  },
-  {
-    id: '3',
-    title: 'Real-time Chat App',
-    description: 'WebSocket-powered chat application with rooms, direct messages, file sharing, and end-to-end encryption.',
-    techStack: ['React', 'Socket.io', 'Express', 'MongoDB'],
-    imageUrl: 'https://images.unsplash.com/photo-1611606063065-ee7946f0787a?w=800&q=80',
-    liveUrl: 'https://example.com',
-    githubUrl: 'https://github.com',
-    featured: false,
-    order: 2,
-  },
-];
-
-export function getProjects(): Project[] {
-  try {
-    const raw = localStorage.getItem(KEYS.projects);
-    if (!raw) return DEFAULT_PROJECTS;
-    return JSON.parse(raw) as Project[];
-  } catch {
-    return DEFAULT_PROJECTS;
-  }
-}
-
-export function saveProjects(projects: Project[]): void {
-  localStorage.setItem(KEYS.projects, JSON.stringify(projects));
-}
-
-// ── Skills ────────────────────────────────────────────────────────────────────
-
-const DEFAULT_SKILLS: Skill[] = [
-  { id: '1', name: 'React', category: 'Frontend', proficiency: 95 },
-  { id: '2', name: 'TypeScript', category: 'Frontend', proficiency: 90 },
-  { id: '3', name: 'Node.js', category: 'Backend', proficiency: 85 },
-  { id: '4', name: 'PostgreSQL', category: 'Database', proficiency: 80 },
-  { id: '5', name: 'Docker', category: 'DevOps', proficiency: 75 },
-  { id: '6', name: 'Next.js', category: 'Frontend', proficiency: 88 },
-];
-
-export function getSkills(): Skill[] {
-  try {
-    const raw = localStorage.getItem(KEYS.skills);
-    if (!raw) return DEFAULT_SKILLS;
-    return JSON.parse(raw) as Skill[];
-  } catch {
-    return DEFAULT_SKILLS;
-  }
-}
-
-export function saveSkills(skills: Skill[]): void {
-  localStorage.setItem(KEYS.skills, JSON.stringify(skills));
-}
-
-// ── About ─────────────────────────────────────────────────────────────────────
-
-const DEFAULT_ABOUT: About = {
+const DEFAULT_ABOUT: AboutData = {
   name: 'Alex Johnson',
-  tagline: 'Full-Stack Developer & Open Source Enthusiast',
-  bio: 'I build performant, accessible, and delightful web experiences. With 5+ years of experience across the full stack, I love turning complex problems into elegant solutions.',
+  tagline: 'Full-Stack Developer & Creative Technologist',
+  bio: 'I build fast, accessible, and beautiful web applications. Passionate about clean code, great UX, and solving real problems with technology.',
   email: 'alex@example.com',
   github: 'https://github.com',
   linkedin: 'https://linkedin.com',
   twitter: 'https://twitter.com',
   resumeUrl: '#',
-  profileImageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
+  profileImageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
 };
 
-export function getAbout(): About {
+const DEFAULT_PROJECTS: Project[] = [
+  {
+    id: '1',
+    title: 'E-Commerce Platform',
+    description: 'A full-stack e-commerce solution with real-time inventory, Stripe payments, and an admin dashboard.',
+    techStack: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
+    imageUrl: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=338&fit=crop',
+    liveUrl: 'https://example.com',
+    githubUrl: 'https://github.com',
+    featured: true,
+  },
+  {
+    id: '2',
+    title: 'AI Chat Application',
+    description: 'Real-time chat app powered by OpenAI GPT with conversation history and user authentication.',
+    techStack: ['Next.js', 'OpenAI', 'Socket.io', 'MongoDB'],
+    imageUrl: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=600&h=338&fit=crop',
+    liveUrl: 'https://example.com',
+    githubUrl: 'https://github.com',
+    featured: true,
+  },
+  {
+    id: '3',
+    title: 'DevOps Dashboard',
+    description: 'Monitoring dashboard for CI/CD pipelines with real-time metrics and alerting.',
+    techStack: ['React', 'Python', 'Docker', 'Grafana'],
+    imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=338&fit=crop',
+    githubUrl: 'https://github.com',
+    featured: false,
+  },
+];
+
+const DEFAULT_SKILLS: Skill[] = [
+  { name: 'React', level: 95, category: 'Frontend' },
+  { name: 'TypeScript', level: 90, category: 'Frontend' },
+  { name: 'Node.js', level: 88, category: 'Backend' },
+  { name: 'PostgreSQL', level: 82, category: 'Backend' },
+  { name: 'Docker', level: 78, category: 'DevOps' },
+  { name: 'AWS', level: 74, category: 'DevOps' },
+];
+
+// ── Helpers ─────────────────────────────────────────────────────────────────
+
+function load<T>(key: string, fallback: T): T {
   try {
-    const raw = localStorage.getItem(KEYS.about);
-    if (!raw) return DEFAULT_ABOUT;
-    return JSON.parse(raw) as About;
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : fallback;
   } catch {
-    return DEFAULT_ABOUT;
+    return fallback;
   }
 }
 
-export function saveAbout(about: About): void {
-  localStorage.setItem(KEYS.about, JSON.stringify(about));
+function save<T>(key: string, value: T): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // ignore storage errors
+  }
+}
+
+// ── Projects ────────────────────────────────────────────────────────────────
+
+export function getProjects(): Project[] {
+  return load(KEYS.projects, DEFAULT_PROJECTS);
+}
+
+export function saveProjects(projects: Project[]): void {
+  save(KEYS.projects, projects);
+}
+
+// ── Skills ──────────────────────────────────────────────────────────────────
+
+export function getSkills(): Skill[] {
+  return load(KEYS.skills, DEFAULT_SKILLS);
+}
+
+export function saveSkills(skills: Skill[]): void {
+  save(KEYS.skills, skills);
+}
+
+// ── About ───────────────────────────────────────────────────────────────────
+
+export function getAbout(): AboutData {
+  return load(KEYS.about, DEFAULT_ABOUT);
+}
+
+export function saveAbout(about: AboutData): void {
+  save(KEYS.about, about);
+}
+
+// ── Admin session ────────────────────────────────────────────────────────────
+
+const ADMIN_PASSWORD = 'admin123';
+
+export function checkAdminAuth(password: string): boolean {
+  return password === ADMIN_PASSWORD;
+}
+
+export function setAdminSession(): void {
+  save(KEYS.adminSession, { loggedIn: true, ts: Date.now() });
+}
+
+export function clearAdminSession(): void {
+  try {
+    localStorage.removeItem(KEYS.adminSession);
+  } catch {
+    // ignore
+  }
+}
+
+export function isAdminLoggedIn(): boolean {
+  const session = load<{ loggedIn?: boolean; ts?: number } | null>(KEYS.adminSession, null);
+  if (!session?.loggedIn) return false;
+  // Session expires after 24 hours
+  const age = Date.now() - (session.ts ?? 0);
+  return age < 24 * 60 * 60 * 1000;
 }

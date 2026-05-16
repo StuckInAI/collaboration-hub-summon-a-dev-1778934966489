@@ -1,87 +1,74 @@
 import { useState, useCallback } from 'react';
 import type { Project, Skill, AboutData } from '@/types';
-import {
-  getProjects,
-  saveProjects,
-  getSkills,
-  saveSkills,
-  getAbout,
-  saveAbout,
-} from '@/lib/storage';
-import { generateId } from '@/lib/utils';
+import { getProjects, saveProjects, getSkills, saveSkills, getAbout, saveAbout } from '@/lib/storage';
 
 export function useProjects() {
-  const [projects, setProjects] = useState<Project[]>(() => getProjects());
+  const [projects, setProjects] = useState<Project[]>(getProjects);
 
-  const addProject = useCallback((project: Omit<Project, 'id'>) => {
-    const newProject: Project = { ...project, id: generateId() };
+  const add = useCallback((project: Project) => {
     setProjects((prev) => {
-      const updated = [...prev, newProject];
-      saveProjects(updated);
-      return updated;
+      const next = [...prev, project];
+      saveProjects(next);
+      return next;
     });
   }, []);
 
-  const updateProject = useCallback((id: string, data: Partial<Project>) => {
+  const update = useCallback((project: Project) => {
     setProjects((prev) => {
-      const updated = prev.map((p) => (p.id === id ? { ...p, ...data } : p));
-      saveProjects(updated);
-      return updated;
+      const next = prev.map((p) => (p.id === project.id ? project : p));
+      saveProjects(next);
+      return next;
     });
   }, []);
 
-  const deleteProject = useCallback((id: string) => {
+  const remove = useCallback((id: string) => {
     setProjects((prev) => {
-      const updated = prev.filter((p) => p.id !== id);
-      saveProjects(updated);
-      return updated;
+      const next = prev.filter((p) => p.id !== id);
+      saveProjects(next);
+      return next;
     });
   }, []);
 
-  return { projects, addProject, updateProject, deleteProject };
+  return { projects, add, update, remove };
 }
 
 export function useSkills() {
-  const [skills, setSkills] = useState<Skill[]>(() => getSkills());
+  const [skills, setSkills] = useState<Skill[]>(getSkills);
 
-  const addSkill = useCallback((skill: Omit<Skill, 'id'>) => {
-    const newSkill: Skill = { ...skill, id: generateId() };
+  const add = useCallback((skill: Skill) => {
     setSkills((prev) => {
-      const updated = [...prev, newSkill];
-      saveSkills(updated);
-      return updated;
+      const next = [...prev, skill];
+      saveSkills(next);
+      return next;
     });
   }, []);
 
-  const updateSkill = useCallback((id: string, data: Partial<Skill>) => {
+  const update = useCallback((skill: Skill) => {
     setSkills((prev) => {
-      const updated = prev.map((s) => (s.id === id ? { ...s, ...data } : s));
-      saveSkills(updated);
-      return updated;
+      const next = prev.map((s) => (s.name === skill.name ? skill : s));
+      saveSkills(next);
+      return next;
     });
   }, []);
 
-  const deleteSkill = useCallback((id: string) => {
+  const remove = useCallback((name: string) => {
     setSkills((prev) => {
-      const updated = prev.filter((s) => s.id !== id);
-      saveSkills(updated);
-      return updated;
+      const next = prev.filter((s) => s.name !== name);
+      saveSkills(next);
+      return next;
     });
   }, []);
 
-  return { skills, addSkill, updateSkill, deleteSkill };
+  return { skills, add, update, remove };
 }
 
 export function useAbout() {
-  const [about, setAbout] = useState<AboutData>(() => getAbout());
+  const [about, setAbout] = useState<AboutData>(getAbout);
 
-  const updateAbout = useCallback((data: Partial<AboutData>) => {
-    setAbout((prev) => {
-      const updated = { ...prev, ...data };
-      saveAbout(updated);
-      return updated;
-    });
+  const update = useCallback((data: AboutData) => {
+    setAbout(data);
+    saveAbout(data);
   }, []);
 
-  return { about, updateAbout };
+  return { about, update };
 }
