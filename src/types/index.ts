@@ -1,4 +1,4 @@
-export type Project = {
+export interface Project {
   id: string;
   title: string;
   description: string;
@@ -6,36 +6,31 @@ export type Project = {
   imageUrl: string;
   liveUrl: string;
   githubUrl: string;
-  order: number;
   featured: boolean;
-};
+  order: number;
+}
 
-export type Skill = {
+export interface Skill {
   id: string;
   name: string;
   category: 'Frontend' | 'Backend' | 'Database' | 'DevOps' | 'Other';
-  proficiency: number; // 1–100
-};
+  proficiency: number;
+}
 
-export type AboutData = {
+export interface About {
   name: string;
   tagline: string;
   bio: string;
-  profileImageUrl: string;
-  resumeUrl: string;
   email: string;
   github: string;
   linkedin: string;
   twitter: string;
-};
+  resumeUrl: string;
+  profileImageUrl: string;
+}
 
-export type ContactMessage = {
+export interface ContactMessage {
   name: string;
   email: string;
   message: string;
-};
-
-export type AdminCredentials = {
-  email: string;
-  password: string;
-};
+}

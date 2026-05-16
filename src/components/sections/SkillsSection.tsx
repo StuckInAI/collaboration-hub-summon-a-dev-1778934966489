@@ -1,65 +1,42 @@
 import { getSkills } from '@/lib/storage';
 import SectionWrapper from '@/components/ui/SectionWrapper';
 import SectionHeader from '@/components/ui/SectionHeader';
-import type { Skill } from '@/types';
 import styles from './SkillsSection.module.css';
 
-const CATEGORY_ORDER: Skill['category'][] = [
-  'Frontend',
-  'Backend',
-  'Database',
-  'DevOps',
-  'Other',
-];
-
-const CATEGORY_COLORS: Record<Skill['category'], string> = {
-  Frontend: 'var(--color-primary)',
-  Backend: 'var(--color-accent)',
-  Database: '#a78bfa',
-  DevOps: '#34d399',
-  Other: '#fb923c',
-};
+type SkillCategory = 'Frontend' | 'Backend' | 'Database' | 'DevOps' | 'Other';
+const CATEGORIES: SkillCategory[] = ['Frontend', 'Backend', 'Database', 'DevOps', 'Other'];
 
 export default function SkillsSection() {
   const skills = getSkills();
 
-  const grouped = CATEGORY_ORDER.reduce<Record<string, Skill[]>>((acc, cat) => {
-    const catSkills = skills.filter((s) => s.category === cat);
-    if (catSkills.length > 0) acc[cat] = catSkills;
-    return acc;
-  }, {});
+  const grouped = CATEGORIES.reduce<Record<SkillCategory, typeof skills>>(
+    (acc, cat) => ({ ...acc, [cat]: skills.filter((s) => s.category === cat) }),
+    {} as Record<SkillCategory, typeof skills>
+  );
 
   return (
     <SectionWrapper id="skills">
       <div className="container">
         <SectionHeader
           label="Skills"
-          title="My Tech Stack"
+          title="Tech Stack"
           description="Technologies and tools I work with on a daily basis."
         />
-        <div className={styles.categories}>
-          {Object.entries(grouped).map(([category, catSkills]) => (
-            <div key={category} className={styles.categoryBlock}>
-              <h3
-                className={styles.categoryTitle}
-                style={{ color: CATEGORY_COLORS[category as Skill['category']] }}
-              >
-                {category}
-              </h3>
+        <div className={styles.grid}>
+          {CATEGORIES.filter((cat) => grouped[cat].length > 0).map((cat) => (
+            <div key={cat} className={styles.category}>
+              <h3 className={styles.categoryTitle}>{cat}</h3>
               <div className={styles.skillList}>
-                {catSkills.map((skill) => (
-                  <div key={skill.id} className={styles.skillItem}>
+                {grouped[cat].map((skill) => (
+                  <div key={skill.id} className={styles.skill}>
                     <div className={styles.skillHeader}>
                       <span className={styles.skillName}>{skill.name}</span>
                       <span className={styles.skillPct}>{skill.proficiency}%</span>
                     </div>
-                    <div className={styles.barTrack}>
+                    <div className={styles.bar}>
                       <div
                         className={styles.barFill}
-                        style={{
-                          width: `${skill.proficiency}%`,
-                          background: CATEGORY_COLORS[skill.category],
-                        }}
+                        style={{ width: `${skill.proficiency}%` }}
                       />
                     </div>
                   </div>
