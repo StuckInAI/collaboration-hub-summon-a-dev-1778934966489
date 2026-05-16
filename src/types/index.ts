@@ -7,15 +7,17 @@ export interface Project {
   liveUrl?: string;
   githubUrl?: string;
   featured: boolean;
+  order: number;
 }
 
 export interface Skill {
+  id: string;
   name: string;
-  level: number;
   category: string;
+  proficiency: number;
 }
 
-export interface AboutData {
+export interface About {
   name: string;
   tagline: string;
   bio: string;
@@ -23,8 +25,8 @@ export interface AboutData {
   github: string;
   linkedin: string;
   twitter: string;
-  resumeUrl: string;
   profileImageUrl: string;
+  resumeUrl: string;
 }
 
 export interface ContactMessage {
