@@ -1,32 +1,23 @@
-import { cn } from '@/lib/utils';
 import styles from './Button.module.css';
+import { cn } from '@/lib/utils';
 
-type ButtonProps = {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
-  children: React.ReactNode;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  type?: 'button' | 'submit' | 'reset';
-  disabled?: boolean;
-  className?: string;
   fullWidth?: boolean;
-};
+  children: React.ReactNode;
+}
 
 export default function Button({
   variant = 'primary',
   size = 'md',
-  children,
-  onClick,
-  type = 'button',
-  disabled = false,
-  className,
   fullWidth = false,
+  className,
+  children,
+  ...props
 }: ButtonProps) {
   return (
     <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
       className={cn(
         styles.btn,
         styles[variant],
@@ -34,6 +25,7 @@ export default function Button({
         fullWidth && styles.fullWidth,
         className
       )}
+      {...props}
     >
       {children}
     </button>
